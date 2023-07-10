@@ -196,13 +196,13 @@ class EightPuzzleSearchProblem(search.SearchProblem):
         "Creates a new EightPuzzleSearchProblem which stores search information."
         self.puzzle = puzzle
 
-    def getStartState(self):
+    def get_start_state(self):
         return puzzle
 
-    def is_goalState(self, state):
+    def is_goal_state(self, state):
         return state.is_goal()
 
-    def getSuccessors(self, state):
+    def get_successors(self, state):
         """
         Returns list of (successor, action, stepCost) pairs where
         each succesor is either left, right, up, or down
@@ -213,7 +213,7 @@ class EightPuzzleSearchProblem(search.SearchProblem):
             succ.append((state.result(move), move, 1))
         return succ
 
-    def getCostOfActions(self, actions):
+    def get_cost_of_actions(self, actions):
         """
         actions: A list of actions to take
 
@@ -275,7 +275,7 @@ if __name__ == '__main__':
     print(puzzle)
 
     problem = EightPuzzleSearchProblem(puzzle)
-    path = search.breadthFirstSearch(problem)
+    path = search.breadth_first_search(problem)
     print(f'BFS found a path of {len(path)} moves: {str(path)}')
     curr = puzzle
     i = 1
