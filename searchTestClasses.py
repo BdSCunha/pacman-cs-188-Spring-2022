@@ -33,12 +33,12 @@ def wrap_solution(solution):
 
 
 def followAction(state, action, problem):
-  for successor1, action1, cost1 in problem.getSuccessors(state):
+  for successor1, action1, cost1 in problem.get_successors(state):
     if action == action1: return successor1
   return None
 
 def followPath(path, problem):
-  state = problem.getStartState()
+  state = problem.get_start_state()
   states = [state]
   for action in path:
     state = followAction(state, action, problem)
@@ -46,10 +46,10 @@ def followPath(path, problem):
   return states
 
 def checkSolution(problem, path):
-  state = problem.getStartState()
+  state = problem.get_start_state()
   for action in path:
     state = followAction(state, action, problem)
-  return problem.isGoalState(state)
+  return problem.is_goal_state(state)
 
 # Search problem on a plain graph
 class GraphSearch(SearchProblem):
@@ -96,20 +96,20 @@ class GraphSearch(SearchProblem):
                 self.successors[s] = []
 
     # Get start state
-    def getStartState(self):
+    def get_start_state(self):
         return self.start_state
 
     # Check if a state is a goal state
-    def isGoalState(self, state):
+    def is_goal_state(self, state):
         return state in self.goals
 
     # Get all successors of a state
-    def getSuccessors(self, state):
+    def get_successors(self, state):
         self.expanded_states.append(state)
         return list(self.successors[state])
 
     # Calculate total cost of a sequence of actions
-    def getCostOfActions(self, actions):
+    def get_cost_of_actions(self, actions):
         total_cost = 0
         state = self.start_state
         for a in actions:
@@ -125,7 +125,7 @@ class GraphSearch(SearchProblem):
                 sys.exit(1)
         return total_cost
 
-    # Return a list of all states on which 'getSuccessors' was called
+    # Return a list of all states on which 'get_successors' was called
     def getExpandedStates(self):
         return self.expanded_states
 
@@ -481,7 +481,7 @@ class HeuristicTest(testClasses.TestCase):
         gameState.initialize(lay, 0)
         problemClass = getattr(searchAgents, self.searchProblemClassName)
         problem = problemClass(gameState)
-        state = problem.getStartState()
+        state = problem.get_start_state()
         heuristic = getattr(searchAgents, self.heuristicName)
 
         return problem, state, heuristic
@@ -502,7 +502,7 @@ class HeuristicTest(testClasses.TestCase):
         if not h0 <= solutionCost:
             return False, 'Heuristic failed admissibility test'
 
-        for succ, action, stepCost in problem.getSuccessors(state):
+        for succ, action, stepCost in problem.get_successors(state):
             h1 = heuristic(succ, problem)
             if h1 < 0: return False, 'Heuristic failed H >= 0 test'
             if h0 - h1 > stepCost: return False, 'Heuristic failed consistency test'
@@ -536,7 +536,7 @@ class HeuristicTest(testClasses.TestCase):
         print(self.layoutText)
         problem, _, heuristic = self.setupProblem(searchAgents)
         path = search.astar(problem, heuristic)
-        cost = problem.getCostOfActions(path)
+        cost = problem.get_cost_of_actions(path)
         print("Problem solved")
 
         handle.write('solution_cost: "%s"\n' % cost)
@@ -565,7 +565,7 @@ class HeuristicGrade(testClasses.TestCase):
         gameState.initialize(lay, 0)
         problemClass = getattr(searchAgents, self.searchProblemClassName)
         problem = problemClass(gameState)
-        state = problem.getStartState()
+        state = problem.get_start_state()
         heuristic = getattr(searchAgents, self.heuristicName)
 
         return problem, state, heuristic
@@ -697,9 +697,9 @@ class CornerHeuristicSanity(testClasses.TestCase):
         lay = layout.Layout([l.strip() for l in self.layout_text.split('\n')])
         game_state.initialize(lay, 0)
         problem = searchAgents.CornersProblem(game_state)
-        start_state = problem.getStartState()
+        start_state = problem.get_start_state()
         h0 = searchAgents.cornersHeuristic(start_state, problem)
-        succs = problem.getSuccessors(start_state)
+        succs = problem.get_successors(start_state)
         # cornerConsistencyA
         for succ in succs:
             h1 = searchAgents.cornersHeuristic(succ[0], problem)
@@ -777,14 +777,14 @@ class CornerHeuristicPacman(testClasses.TestCase):
         lay = layout.Layout([l.strip() for l in self.layout_text.split('\n')])
         game_state.initialize(lay, 0)
         problem = searchAgents.CornersProblem(game_state)
-        start_state = problem.getStartState()
+        start_state = problem.get_start_state()
         if searchAgents.cornersHeuristic(start_state, problem) > true_cost:
             grades.addMessage('FAIL: Inadmissible heuristic')
             return False
         path = search.astar(problem, searchAgents.cornersHeuristic)
         print("path:", path)
         print("path length:", len(path))
-        cost = problem.getCostOfActions(path)
+        cost = problem.get_cost_of_actions(path)
         if cost > true_cost:
             grades.addMessage('FAIL: Inconsistent heuristic')
             return False
